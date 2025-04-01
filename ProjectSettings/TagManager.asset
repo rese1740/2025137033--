@@ -10,6 +10,8 @@ TagManager:
   - Potal1
   - Potal2
   - Bullet
+  - SpeedItem
+  - Invincible
   layers:
   - Default
   - TransparentFX

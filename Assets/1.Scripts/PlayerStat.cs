@@ -142,19 +142,17 @@ public class PlayerStat : MonoBehaviour
         {
             speed += 10;
             Invoke("SpeedUp", 5f);
+            Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("Invincible"))
         {
             Invincible = true;
             Invoke("InvincibleUp", 5f);
+            Destroy(collision.gameObject);
         }
         #endregion
 
-        switch (collision.gameObject.tag)
-        {
-            case "SpeedItem":
-                break;
-        }
+       
     }
 
     private void OnTriggerExit2D(Collider2D collision)
