@@ -74,9 +74,9 @@ public class Boss : MonoBehaviour
 
         // 애니메이션 방향 전환 (좌우 이동 시)
         if (moveDirection.x > 0)
-            transform.localScale = new Vector3(6, 6, 1);
+            transform.localScale = new Vector3(5, 5, 1);
         else
-            transform.localScale = new Vector3(-6, 6, 1);
+            transform.localScale = new Vector3(-5, 5, 1);
 
         anim.SetBool("move", true);
     }

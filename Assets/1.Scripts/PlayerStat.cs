@@ -11,6 +11,8 @@ public class PlayerStat : MonoBehaviour
     public float bulletSpeed = 10f;
     public bool isJumping = false;
 
+    
+
     [Header("공격")]
     public GameObject bullet_;
     public Transform gunPos;
@@ -36,12 +38,13 @@ public class PlayerStat : MonoBehaviour
 
     void Update()
     {
+        #region 이동
         float direction = Input.GetAxis("Horizontal");
 
         // 방향에 따른 스케일 수정 및 애니메이션 상태 변경
         if (direction != 0)
         {
-            transform.localScale = new Vector3(Mathf.Sign(direction) * 10f, 10f, 1); // 방향에 맞춰 스케일을 수정
+            transform.localScale = new Vector3(Mathf.Sign(direction) * 7f, 7f, 1); // 방향에 맞춰 스케일을 수정
             myAnimator.SetBool("move", true);  // 이동 중인 상태
         }
         else
@@ -58,7 +61,6 @@ public class PlayerStat : MonoBehaviour
         }
 
 
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (!isJumping)
@@ -66,7 +68,11 @@ public class PlayerStat : MonoBehaviour
                 Jump();
             }
         }
+        transform.Translate(Vector3.right * direction * speed * Time.deltaTime);
 
+        #endregion
+
+        #region 포탈
         if (Input.GetKeyDown(KeyCode.F))
         {
             if (currentpotal != null)
@@ -83,7 +89,9 @@ public class PlayerStat : MonoBehaviour
                 SceneManager.LoadScene("MainScene");
             }
         }
+        #endregion
 
+        #region 공격
         if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭이 눌리면
         {
             myAnimator.SetTrigger("attack");
@@ -109,10 +117,11 @@ public class PlayerStat : MonoBehaviour
         }
 
         playerHealthSlider.value = playerHealth;
+        #endregion
 
-        transform.Translate(Vector3.right * direction * speed * Time.deltaTime);
     }
 
+  
 
     #region 닿는 처리
     private void OnCollisionEnter2D(Collision2D collision)

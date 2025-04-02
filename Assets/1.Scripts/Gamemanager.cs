@@ -10,7 +10,6 @@ public class Gamemanager : MonoBehaviour
 
     private void Start()
     {
-        Instantiate(Player,PlayerSpawnTr);
     }
 
     private void Update()
