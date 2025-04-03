@@ -10,13 +10,13 @@ public class PlayerStat : MonoBehaviour
     public float jumpForce = 100f;
     public float bulletSpeed = 10f;
     public bool isJumping = false;
-
-    
+   
 
     [Header("공격")]
     public GameObject bullet_;
     public Transform gunPos;
     private bool isFacingRight = true;
+    private float damage_ = 5.0f;
 
     [Header("체력")]
     public float playerHealth = 10.0f;
@@ -26,14 +26,19 @@ public class PlayerStat : MonoBehaviour
 
     [Header("기타")]
     public Animator myAnimator;
+    public Image playerImg;
+    public Sprite[] pImg;
+    public GameObject wallText; 
+    private int ImgIndex;
+    private GameObject ImgObject0, ImgObject1, ImgObject2;
     private Rigidbody2D rb;
-    private GameObject currentpotal, currentPotal1, currentPotal2;
 
 
     private void Start()
     {
         myAnimator.SetBool("move", false);
         rb = GetComponent<Rigidbody2D>();
+        playerImg.sprite = pImg[0];
     }
 
     void Update()
@@ -61,7 +66,7 @@ public class PlayerStat : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (!isJumping)
             {
@@ -75,24 +80,23 @@ public class PlayerStat : MonoBehaviour
         #region 포탈
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if (currentpotal != null)
+            if(ImgObject0 != null)
             {
-                SceneManager.LoadScene("DoorScene");
+                playerImg.sprite = pImg[0];
             }
-
-            if (currentPotal1 != null)
+            if (ImgObject1 != null)
             {
-                SceneManager.LoadScene("DoorScene1");
+                playerImg.sprite = pImg[1];
             }
-            if (currentPotal2 != null)
+            if (ImgObject2 != null)
             {
-                SceneManager.LoadScene("MainScene");
+                playerImg.sprite = pImg[2];
             }
         }
         #endregion
 
         #region 공격
-        if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭이 눌리면
+        if (Input.GetKeyDown(KeyCode.Z)) 
         {
             myAnimator.SetTrigger("attack");
 
@@ -118,18 +122,38 @@ public class PlayerStat : MonoBehaviour
 
         playerHealthSlider.value = playerHealth;
         #endregion
-
+        
     }
 
-  
+
 
     #region 닿는 처리
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // "Ground" 태그를 가진 객체와 충돌 시
         if (collision.collider.CompareTag("Ground"))
         {
             isJumping = false;
         }
+
+        // "Wall" 태그를 가진 객체와 충돌 시
+        if (collision.collider.CompareTag("Wall"))
+        {
+            if (wallText != null)
+                wallText.SetActive(true);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // "Wall" 태그를 가진 객체와 충돌을 벗어날 때
+        if (collision.collider.CompareTag("Wall"))
+        {
+            if (wallText != null)
+                wallText.SetActive(false);
+        }
+
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -137,17 +161,33 @@ public class PlayerStat : MonoBehaviour
         #region 태그
         if (collision.CompareTag("Potal"))
         {
-            currentpotal = collision.gameObject;
+            SceneManager.LoadScene("Stage2");
         }
         else if (collision.CompareTag("Potal1"))
         {
-            currentPotal1 = collision.gameObject;
+            SceneManager.LoadScene("Stage3");
         }
         else if (collision.CompareTag("Potal2"))
         {
-            currentPotal2 = collision.gameObject;
+            SceneManager.LoadScene("Stage4");
         }
-        else if (collision.CompareTag("SpeedItem"))
+
+        //UI 이미지
+        if (collision.CompareTag("Item0"))
+        {
+            ImgObject0 = collision.gameObject;
+        }
+        else if (collision.CompareTag("Item1"))
+        {
+            ImgObject1 = collision.gameObject;
+        }
+        else if (collision.CompareTag("Item2"))
+        {
+            ImgObject2 = collision.gameObject;
+        }
+
+        //아이템
+        if (collision.CompareTag("SpeedItem"))
         {
             speed += 10;
             Invoke("SpeedUp", 5f);
@@ -159,32 +199,56 @@ public class PlayerStat : MonoBehaviour
             Invoke("InvincibleUp", 5f);
             Destroy(collision.gameObject);
         }
+        else if (collision.CompareTag("JumpItem"))
+        {
+            Invincible = true;
+            Invoke("InvincibleUp", 5f);
+            Destroy(collision.gameObject);
+        }
+
+        //장애물
+        if (collision.CompareTag("disabled"))
+        {
+            TakeDamage(damage_);
+
+            if (rb != null)
+            {
+                Vector2 knockbackDirection = (transform.position.x > collision.transform.position.x) ?
+                new Vector2(1, 1) : new Vector2(-1, 1); // 무조건 대각선 방향 (좌상 or 우상)
+
+                knockbackDirection.Normalize();
+
+                float knockbackForce = 5.5f;
+                rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+            }
+        }
         #endregion
 
-       
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Potal"))
+        //UI 이미지
+        if (collision.CompareTag("Item0"))
         {
-            if (collision.gameObject == currentpotal)
+            if (collision.gameObject == ImgObject0)
             {
-                currentpotal = null;
+                ImgObject0 = null;
             }
         }
-        else if (collision.CompareTag("Potal1"))
+        else if (collision.CompareTag("Item1"))
         {
-            if (collision.gameObject == currentpotal)
+            if (collision.gameObject == ImgObject1)
             {
-                currentPotal1 = null;
+                ImgObject1 = null;
             }
         }
-        else if (collision.CompareTag("Potal2"))
+        else if (collision.CompareTag("Item2"))
         {
-            if (collision.gameObject == currentpotal)
+            if (collision.gameObject == ImgObject2)
             {
-                currentPotal2 = null;
+                ImgObject2 = null;
             }
         }
     }

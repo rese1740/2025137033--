@@ -109,6 +109,11 @@ MonoBehaviour:
   playerHealth: 100
   playerHealthSlider: {fileID: 0}
   myAnimator: {fileID: 8252386670252718139}
+  playerImg: {fileID: 0}
+  pImg:
+  - {fileID: -1507839146, guid: 65ce8b731e1efbd4d8e681ee98d2ab85, type: 3}
+  - {fileID: 256048711, guid: 4282a1e20e673d943a10aa8a0fdf40fc, type: 3}
+  - {fileID: -792567532, guid: ce95cc2f5b9c966458d789eb4b4b2654, type: 3}
 --- !u!95 &8252386670252718139
 Animator:
   serializedVersion: 5
@@ -180,7 +185,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -191,4 +196,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
