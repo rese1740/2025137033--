@@ -19,7 +19,6 @@ public class PlayerStat : MonoBehaviour
     private float damage_ = 5.0f;
 
     [Header("체력")]
-    public float playerHealth = 10.0f;
     public Slider playerHealthSlider;
     private bool Invincible = false;
 
@@ -120,7 +119,7 @@ public class PlayerStat : MonoBehaviour
             }
         }
 
-        playerHealthSlider.value = playerHealth;
+        playerHealthSlider.value = DataBaseManager.Instance.playerHealth;
         #endregion
         
     }
@@ -159,18 +158,21 @@ public class PlayerStat : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         #region 태그
-        if (collision.CompareTag("Potal"))
+        if (collision.CompareTag("Portal")) // 포탈 태그 감지
         {
-            SceneManager.LoadScene("Stage2");
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex; // 현재 씬 인덱스 가져오기
+            int nextSceneIndex = currentSceneIndex + 1; // 다음 씬
+
+            if (nextSceneIndex < SceneManager.sceneCountInBuildSettings) // 씬이 남아있다면
+            {
+                SceneManager.LoadScene(nextSceneIndex);
+            }
+            else // 마지막 씬이면 처음으로 돌아감
+            {
+                SceneManager.LoadScene(0);
+            }
         }
-        else if (collision.CompareTag("Potal1"))
-        {
-            SceneManager.LoadScene("Stage3");
-        }
-        else if (collision.CompareTag("Potal2"))
-        {
-            SceneManager.LoadScene("Stage4");
-        }
+
 
         //UI 이미지
         if (collision.CompareTag("Item0"))
@@ -264,7 +266,7 @@ public class PlayerStat : MonoBehaviour
         myAnimator.SetTrigger("damage");
         if (!Invincible)
         {
-            playerHealth -= damage;
+            DataBaseManager.Instance.playerHealth -= damage;
         }
     }
 

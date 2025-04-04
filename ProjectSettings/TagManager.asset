@@ -5,9 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - Potal
-  - Potal1
-  - Potal2
   - Bullet
   - SpeedItem
   - Invincible
@@ -17,6 +14,9 @@ TagManager:
   - Wall
   - JumpItem
   - disabled
+  - Obstacle
+  - Portal
+  - OutLine
   layers:
   - Default
   - TransparentFX

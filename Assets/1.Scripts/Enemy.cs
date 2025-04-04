@@ -17,7 +17,6 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        // 새로운 위치 계산
         Vector2 targetPosition = rb.position + Vector2.right * speed * direction * Time.fixedDeltaTime;
         rb.MovePosition(targetPosition);
 
@@ -25,6 +24,7 @@ public class Enemy : MonoBehaviour
         if (Mathf.Abs(rb.position.x - startPosition.x) >= moveDistance)
         {
             direction *= -1; // 방향 반전
+            startPosition = rb.position; // 현재 위치를 새로운 시작 위치로 설정
             FlipSprite();    // 스프라이트 뒤집기
         }
     }
@@ -36,3 +36,4 @@ public class Enemy : MonoBehaviour
         transform.localScale = localScale;
     }
 }
+

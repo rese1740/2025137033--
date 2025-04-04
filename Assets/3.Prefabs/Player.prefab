@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1741575186, guid: 43bfa2b184972d548a99ff0ee9ab7a9f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -106,7 +106,6 @@ MonoBehaviour:
   isJumping: 0
   bullet_: {fileID: 6835689714672961807, guid: 2cda3a9ae35b0ca41b011469428ef392, type: 3}
   gunPos: {fileID: 5019927649079538688}
-  playerHealth: 100
   playerHealthSlider: {fileID: 0}
   myAnimator: {fileID: 8252386670252718139}
   playerImg: {fileID: 0}
@@ -114,6 +113,7 @@ MonoBehaviour:
   - {fileID: -1507839146, guid: 65ce8b731e1efbd4d8e681ee98d2ab85, type: 3}
   - {fileID: 256048711, guid: 4282a1e20e673d943a10aa8a0fdf40fc, type: 3}
   - {fileID: -792567532, guid: ce95cc2f5b9c966458d789eb4b4b2654, type: 3}
+  wallText: {fileID: 0}
 --- !u!95 &8252386670252718139
 Animator:
   serializedVersion: 5

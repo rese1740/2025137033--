@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Gamemanager : MonoBehaviour
 {
-    public GameObject Player;
-    public Transform PlayerSpawnTr;
     public GameObject Esc_UI;
+    public DataBaseManager dataBaseManager;
 
     private void Start()
     {
+        dataBaseManager.Init();
     }
 
     private void Update()
