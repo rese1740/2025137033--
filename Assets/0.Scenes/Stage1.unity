@@ -3924,7 +3924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Esc_UI: {fileID: 780203718}
-  dataBaseManager: {fileID: 0}
+  dataBaseManager: {fileID: 11400000, guid: 813c80b454926804f96681eef2903b78, type: 2}
 --- !u!4 &1425334778
 Transform:
   m_ObjectHideFlags: 0

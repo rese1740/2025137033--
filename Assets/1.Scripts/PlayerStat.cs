@@ -10,6 +10,7 @@ public class PlayerStat : MonoBehaviour
     public float jumpForce = 100f;
     public float bulletSpeed = 10f;
     public bool isJumping = false;
+    private Vector3 startPos;
    
 
     [Header("АјАн")]
@@ -37,6 +38,7 @@ public class PlayerStat : MonoBehaviour
     {
         myAnimator.SetBool("move", false);
         rb = GetComponent<Rigidbody2D>();
+        startPos = new Vector3(-6.95f, -2.7f, 0f);
         playerImg.sprite = pImg[0];
     }
 
@@ -171,6 +173,12 @@ public class PlayerStat : MonoBehaviour
             {
                 SceneManager.LoadScene(0);
             }
+        }
+
+        //outline
+        if (collision.CompareTag("OutLine"))
+        {
+           gameObject.transform.position = startPos;
         }
 
 

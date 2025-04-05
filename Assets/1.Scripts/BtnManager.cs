@@ -17,7 +17,7 @@ public class BtnManager : MonoBehaviour
     }
     public void GameStart()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("Stage1");
         audioSources.PlayOneShot(clickSound);
     }
 
