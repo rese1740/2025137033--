@@ -8,6 +8,7 @@ public class Boss : MonoBehaviour
 
     [Header("보스 UI")]
     public Slider hpSlider;
+    public Image hpImg;
 
     [Header("보스 스탯")]
     public float bossHealth = 100.0f;
@@ -15,8 +16,14 @@ public class Boss : MonoBehaviour
     public float bossDamage = 5.0f;
     public float attackRange = 2.0f;  // 공격 범위
     public bool isAlive = true;
-    private float attackCooldown = 5.0f; // 공격 쿨타임 (초)
+    private float attackCooldown = 3.0f; // 공격 쿨타임 (초)
     private float lastAttackTime = -Mathf.Infinity; // 마지막 공격 시간
+    private int attack1Count = 0;
+
+
+    [Header("보스 공격 프리팹")]
+    public GameObject slashPrefab;
+    public Transform firePoint; // Slash가 생성될 위치 (보스 손 앞 등)
 
     [Header("기타")]
     public float bulletDamage = 5.0f;
@@ -60,6 +67,11 @@ public class Boss : MonoBehaviour
         }
 
         hpSlider.value = bossHealth;
+
+        if(bossHealth <= 50)
+        {
+            hpImg.color = Color.red;   
+        }
     }
 
     private void MoveTowardsPlayer()
@@ -129,7 +141,43 @@ public class Boss : MonoBehaviour
                 playerHealth.TakeDamage(bossDamage);
             }
         }
+
+        // 공격 횟수 증가 및 체크
+        attack1Count++;
+
+        if (attack1Count >= 4)
+        {
+            attack1Count = 0; // 초기화
+            BossAttack2();    // 순간이동 공격 발동
+        }
     }
+
+
+    public void BossAttack2()
+    {
+        if (slashPrefab == null || firePoint == null) return;
+
+        anim.SetTrigger("attack2");
+
+        // 보스가 바라보는 방향 확인
+        float direction = transform.localScale.x > 0 ? 1f : -1f;
+
+        // 프리팹 생성
+        GameObject slash = Instantiate(slashPrefab, firePoint.position, Quaternion.identity);
+
+        Rigidbody2D slashRb = slash.GetComponent<Rigidbody2D>();
+        if (slashRb != null)
+        {
+            float slashSpeed = 10f;
+            slashRb.velocity = new Vector2(direction * slashSpeed, 0f);
+        }
+
+        // 슬래시 방향도 회전
+        Vector3 slashScale = slash.transform.localScale;
+        slashScale.x = direction * Mathf.Abs(slashScale.x);
+        slash.transform.localScale = slashScale;
+    }
+
 
     public void BossDeath()
     {

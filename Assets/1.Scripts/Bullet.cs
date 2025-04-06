@@ -3,24 +3,28 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float bulletSpeed = 10f;
-    private Vector2 direction;
+    private Vector2 direction = Vector2.right;  // 기본값: 오른쪽
 
-    // 방향을 설정하는 함수
-    public void SetDirection(Vector2 direction)
+    private Rigidbody2D rb;
+
+    public void SetDirection(Vector2 dir)
     {
-        this.direction = direction; // 총알의 이동 방향 설정
+        if (dir != Vector2.zero)
+            direction = dir.normalized;
+    }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
     {
-        Invoke("bulletDestroy", 3f);
-    }
-    void Update()
-    {
-        transform.Translate(direction * bulletSpeed * Time.deltaTime);
+        rb.velocity = direction * bulletSpeed;
+        Invoke(nameof(DestroyBullet), 3f);
     }
 
-    public void bulletDestroy()
+    private void DestroyBullet()
     {
         Destroy(gameObject);
     }
