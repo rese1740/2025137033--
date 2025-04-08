@@ -45,36 +45,37 @@ public class PlayerStat : MonoBehaviour
     void Update()
     {
         #region 이동
+        // 방향 입력
         float direction = Input.GetAxis("Horizontal");
 
         // 방향에 따른 스케일 수정 및 애니메이션 상태 변경
         if (direction != 0)
         {
-            transform.localScale = new Vector3(Mathf.Sign(direction) * 7f, 7f, 1); // 방향에 맞춰 스케일을 수정
-            myAnimator.SetBool("move", true);  // 이동 중인 상태
+            // 현재 방향에 따라 스케일을 수정하고, 애니메이션 상태 변경
+            if ((direction > 0 && !isFacingRight) || (direction < 0 && isFacingRight))
+            {
+                // 반대 방향으로 돌릴 때만 스케일을 수정
+                transform.localScale = new Vector3(Mathf.Sign(direction) * 7f, 7f, 1);
+                isFacingRight = !isFacingRight; // 방향 전환 상태 업데이트
+            }
+            myAnimator.SetBool("move", true); // 이동 중인 상태
         }
         else
         {
-            myAnimator.SetBool("move", false);  // 정지 상태
-        }
-        if (transform.localScale.x > 0)
-        {
-            isFacingRight = true;
-        }
-        else if (transform.localScale.x < 0)
-        {
-            isFacingRight = false;
+            myAnimator.SetBool("move", false); // 정지 상태
         }
 
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        // 점프 입력 처리
+        if (Input.GetKeyDown(KeyCode.UpArrow) && !isJumping)
         {
-            if (!isJumping)
-            {
-                Jump();
-            }
+            Jump();
         }
-        transform.Translate(Vector3.right * direction * speed * Time.deltaTime);
+
+        // 캐릭터 이동 (Rigidbody2D의 velocity로 이동 처리)
+        Vector2 currentVelocity = rb.velocity;
+        rb.velocity = new Vector2(direction * speed, currentVelocity.y); // 수평 이동만 업데이트
+
+
 
         #endregion
 

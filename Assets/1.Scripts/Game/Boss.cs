@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
@@ -43,11 +44,7 @@ public class Boss : MonoBehaviour
     {
         if (!isAlive) return;
 
-        if (bossHealth <= 0)
-        {
-            isAlive = false;
-            BossDeath();
-        }
+       
 
         player = FindClosestPlayer();
 
@@ -71,6 +68,13 @@ public class Boss : MonoBehaviour
         if(bossHealth <= 50)
         {
             hpImg.color = Color.red;   
+        }
+
+        if (bossHealth <= 14)
+        {
+            SceneManager.LoadScene("Ending_Scene");
+            isAlive = false;
+            BossDeath();
         }
     }
 
