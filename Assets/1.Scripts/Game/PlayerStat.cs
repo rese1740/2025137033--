@@ -18,6 +18,10 @@ public class PlayerStat : MonoBehaviour
     public Transform gunPos;
     private bool isFacingRight = true;
     private float damage_ = 5.0f;
+    //스킬 1
+    public float skillDamage = 0;
+    public Slider skillSlider;
+
 
     [Header("체력")]
     public Slider playerHealthSlider;
@@ -123,8 +127,30 @@ public class PlayerStat : MonoBehaviour
         }
 
         playerHealthSlider.value = DataBaseManager.Instance.playerHealth;
+        skillSlider.value = skillDamage;
+
+        if (Input.GetKey(KeyCode.X) && skillDamage <=10 )
+        {
+            skillSlider.gameObject.SetActive(true);
+            skillDamage += Time.deltaTime;
+            myAnimator.SetBool("isReady",true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.X))
+        {
+            myAnimator.SetBool("isReady", false);
+            skillSlider.gameObject.SetActive(false);
+            skillDamage = 0;
+
+        }
         #endregion
-        
+
+        #region HP
+        if (DataBaseManager.Instance.playerHealth <= 0)
+        {
+
+        }
+        #endregion
     }
 
 
