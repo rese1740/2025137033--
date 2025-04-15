@@ -14,7 +14,6 @@ TagManager:
   - Wall
   - JumpItem
   - disabled
-  - Obstacle
   - Portal
   - OutLine
   layers:

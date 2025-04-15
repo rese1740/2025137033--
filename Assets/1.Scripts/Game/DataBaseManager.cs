@@ -10,15 +10,12 @@ public class DataBaseManager : ScriptableObject
     [Header("Ã¼·Â")]
     public float playerHealth = 10.0f;
 
+    
 
     public void Init()
     {
         Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
 }

@@ -11,7 +11,7 @@ public class PlayerStat : MonoBehaviour
     public float bulletSpeed = 10f;
     public bool isJumping = false;
     private Vector3 startPos;
-   
+
 
     [Header("공격")]
     public GameObject bullet_;
@@ -32,9 +32,8 @@ public class PlayerStat : MonoBehaviour
     public Animator myAnimator;
     public Image playerImg;
     public Sprite[] pImg;
-    public GameObject wallText; 
-    private int ImgIndex;
-    private GameObject ImgObject0, ImgObject1, ImgObject2;
+    public GameObject wallText;
+    public Text itemText;
     private Rigidbody2D rb;
 
 
@@ -83,26 +82,8 @@ public class PlayerStat : MonoBehaviour
 
         #endregion
 
-        #region 포탈
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            if(ImgObject0 != null)
-            {
-                playerImg.sprite = pImg[0];
-            }
-            if (ImgObject1 != null)
-            {
-                playerImg.sprite = pImg[1];
-            }
-            if (ImgObject2 != null)
-            {
-                playerImg.sprite = pImg[2];
-            }
-        }
-        #endregion
-
         #region 공격
-        if (Input.GetKeyDown(KeyCode.Z)) 
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             myAnimator.SetTrigger("attack");
 
@@ -129,11 +110,11 @@ public class PlayerStat : MonoBehaviour
         playerHealthSlider.value = DataBaseManager.Instance.playerHealth;
         skillSlider.value = skillDamage;
 
-        if (Input.GetKey(KeyCode.X) && skillDamage <=10 )
+        if (Input.GetKey(KeyCode.X) && skillDamage <= 10)
         {
             skillSlider.gameObject.SetActive(true);
             skillDamage += Time.deltaTime;
-            myAnimator.SetBool("isReady",true);
+            myAnimator.SetBool("isReady", true);
         }
 
         if (Input.GetKeyUp(KeyCode.X))
@@ -148,9 +129,11 @@ public class PlayerStat : MonoBehaviour
         #region HP
         if (DataBaseManager.Instance.playerHealth <= 0)
         {
-
+            SceneManager.LoadScene("LobbyScene");
         }
         #endregion
+
+        
     }
 
 
@@ -181,7 +164,7 @@ public class PlayerStat : MonoBehaviour
                 wallText.SetActive(false);
         }
 
-        
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -205,22 +188,7 @@ public class PlayerStat : MonoBehaviour
         //outline
         if (collision.CompareTag("OutLine"))
         {
-           gameObject.transform.position = startPos;
-        }
-
-
-        //UI 이미지
-        if (collision.CompareTag("Item0"))
-        {
-            ImgObject0 = collision.gameObject;
-        }
-        else if (collision.CompareTag("Item1"))
-        {
-            ImgObject1 = collision.gameObject;
-        }
-        else if (collision.CompareTag("Item2"))
-        {
-            ImgObject2 = collision.gameObject;
+            gameObject.transform.position = startPos;
         }
 
         //아이템
@@ -234,12 +202,14 @@ public class PlayerStat : MonoBehaviour
         {
             Invincible = true;
             Invoke("InvincibleUp", 5f);
+            itemText.text = "무적이다냥";
+            itemText.gameObject.SetActive(true);
             Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("JumpItem"))
         {
-            Invincible = true;
-            Invoke("InvincibleUp", 5f);
+            jumpForce += 2;
+            Invoke("JumpUp", 5f);
             Destroy(collision.gameObject);
         }
 
@@ -261,36 +231,11 @@ public class PlayerStat : MonoBehaviour
         }
         #endregion
 
-
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        //UI 이미지
-        if (collision.CompareTag("Item0"))
-        {
-            if (collision.gameObject == ImgObject0)
-            {
-                ImgObject0 = null;
-            }
-        }
-        else if (collision.CompareTag("Item1"))
-        {
-            if (collision.gameObject == ImgObject1)
-            {
-                ImgObject1 = null;
-            }
-        }
-        else if (collision.CompareTag("Item2"))
-        {
-            if (collision.gameObject == ImgObject2)
-            {
-                ImgObject2 = null;
-            }
-        }
-    }
     #endregion
 
+    #region 점프
     void Jump()
     {
         isJumping = true;
@@ -304,7 +249,9 @@ public class PlayerStat : MonoBehaviour
             DataBaseManager.Instance.playerHealth -= damage;
         }
     }
+    #endregion
 
+    #region 아이템
     public void SpeedUp()
     {
         speed -= 10;
@@ -312,5 +259,11 @@ public class PlayerStat : MonoBehaviour
     void InvincibleUp()
     {
         Invincible = false;
+        itemText.gameObject.SetActive(false);
     }
+    void JumpUp()
+    {
+        jumpForce -= 2;
+    }
+    #endregion 
 }
