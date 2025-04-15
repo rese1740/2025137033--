@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Slash_ : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public float death_Timer = 0;   
     void Start()
     {
-        Destroy(gameObject,3f);
+        Destroy(gameObject,death_Timer);
     }
 }

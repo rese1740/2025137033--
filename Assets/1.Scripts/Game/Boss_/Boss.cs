@@ -21,35 +21,38 @@ public class Boss : MonoBehaviour
 
     [Header("보스 패턴1")]
     public float attackCooldown = 3.0f; // 공격 쿨타임 (초)
+    public GameObject warningEffectPrefab;
+    private Coroutine attack1Routine;
+    private int attack1Count = 0;
+    public Transform effectSpawnPoint;
 
     [Header("보스 공격 프리팹")]
     public GameObject slashPrefab;
-    public Transform firePoint; // Slash가 생성될 위치 (보스 손 앞 등)
+    public Transform firePoint; 
     public GameObject bigSlashEffect;
 
     [Header("기타")]
     public float bulletDamage = 5.0f;
     public Transform player;
-    public LayerMask playerLayer;  // 플레이어 탐색을 위한 레이어
-    private Vector2 direction_;
+    public LayerMask playerLayer;  
 
     private void Start()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
-        StartCoroutine(BossAttack1());
+        attack1Routine = StartCoroutine(BossAttack1Loop());
     }
 
     private void Update()
     {
         if (!isAlive) return;
-       
+
         hpSlider.value = bossHealth;
 
-        if(bossHealth <= 50)
+        if (bossHealth <= 50)
         {
-            hpImg.color = Color.red;   
+            hpImg.color = Color.red;
         }
 
         if (bossHealth <= 14)
@@ -59,18 +62,14 @@ public class Boss : MonoBehaviour
             BossDeath();
         }
 
-      
-
         // 보스가 플레이어 바라보게
         if (player.position.x < transform.position.x)
         {
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            direction_ = new Vector2(-1, 0);
         }
         else
         {
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            direction_ = new Vector2(1, 0);
         }
     }
 
@@ -88,37 +87,50 @@ public class Boss : MonoBehaviour
 
 
 
-    IEnumerator BossAttack1()
+    private IEnumerator BossAttack1Loop()
     {
         while (true)
         {
             yield return new WaitForSeconds(attackCooldown);
 
             anim.SetTrigger("attack");
-           
-            GameObject slash = Instantiate(slashPrefab, firePoint.position, Quaternion.identity);
 
+            Vector2 directionToPlayer = (player.position - transform.position).normalized;
+
+            GameObject slash = Instantiate(slashPrefab, firePoint.position, Quaternion.identity);
             Rigidbody2D slashRb = slash.GetComponent<Rigidbody2D>();
+
             if (slashRb != null)
             {
                 float slashSpeed = 10f;
-                slashRb.velocity = direction_ * slashSpeed;
+                slashRb.velocity = directionToPlayer * slashSpeed;
             }
 
-            // 슬래시 스프라이트 방향 조정
-            Vector3 slashScale = slash.transform.localScale;
-            slashScale.x = direction_.x > 0 ? Mathf.Abs(slashScale.x) : -Mathf.Abs(slashScale.x);
-            slash.transform.localScale = slashScale;
+            float angle = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
+            slash.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            attack1Count++;
+
+            if (attack1Count >= 3)
+            {
+                attack1Count = 0;
+                yield return StartCoroutine(BossAttack2());
+            }
         }
     }
 
-
-   
-    public void BossAttack2()
+    private IEnumerator BossAttack2()
     {
         anim.SetTrigger("attack2");
-    }
 
+        GameObject warning = Instantiate(warningEffectPrefab, effectSpawnPoint.position, Quaternion.identity);
+        yield return new WaitForSeconds(0.8f);
+
+        Instantiate(bigSlashEffect, effectSpawnPoint.position, Quaternion.identity);
+        Destroy(warning, 0.5f);
+
+        yield return new WaitForSeconds(1.0f); // 약간의 여유 시간 (이펙트 끝날 때까지)
+    }
 
     public void BossDeath()
     {
