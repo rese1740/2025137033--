@@ -738,9 +738,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 65c2dd722fe32f1419f4a0af7f79d30f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
+  m_Volume: 0.3
+  m_Pitch: 1.05
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1769,6 +1769,18 @@ PrefabInstance:
       propertyPath: playerHealthSlider
       value: 
       objectReference: {fileID: 918838858}
+    - target: {fileID: 708555895809327835, guid: 63f7ef33310856c45ad045e45929bddc, type: 3}
+      propertyPath: audioClip.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 708555895809327835, guid: 63f7ef33310856c45ad045e45929bddc, type: 3}
+      propertyPath: audioClip.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 3f31af427c820bb4ca48b690b05def98, type: 3}
+    - target: {fileID: 1673228110975249810, guid: 63f7ef33310856c45ad045e45929bddc, type: 3}
+      propertyPath: m_Pitch
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5019927649079538688, guid: 63f7ef33310856c45ad045e45929bddc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.15

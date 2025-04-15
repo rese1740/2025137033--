@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,6 +19,8 @@ public class PlayerStat : MonoBehaviour
     public Transform gunPos;
     private bool isFacingRight = true;
     private float damage_ = 5.0f;
+    public float attackCooldown = 0.5f;
+    private bool isAttackOnCooldown = false;
     //스킬 1
     public float skillDamage = 0;
     public Slider skillSlider;
@@ -27,6 +30,8 @@ public class PlayerStat : MonoBehaviour
     public Slider playerHealthSlider;
     private bool Invincible = false;
 
+    [Header("소리")]
+    public AudioClip[] audioClip;
 
     [Header("기타")]
     public Animator myAnimator;
@@ -35,6 +40,7 @@ public class PlayerStat : MonoBehaviour
     public GameObject wallText;
     public Text itemText;
     private Rigidbody2D rb;
+    private AudioSource audioSource;
 
 
     private void Start()
@@ -43,6 +49,7 @@ public class PlayerStat : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         startPos = new Vector3(-6.95f, -2.7f, 0f);
         playerImg.sprite = pImg[0];
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -72,6 +79,7 @@ public class PlayerStat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow) && !isJumping)
         {
             Jump();
+            audioSource.PlayOneShot(audioClip[0]);
         }
 
         // 캐릭터 이동 (Rigidbody2D의 velocity로 이동 처리)
@@ -83,28 +91,9 @@ public class PlayerStat : MonoBehaviour
         #endregion
 
         #region 공격
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && !isAttackOnCooldown)
         {
-            myAnimator.SetTrigger("attack");
-
-            Vector2 shootDirection = isFacingRight ? Vector2.right : Vector2.left;  // 오른쪽이면 (1, 0), 왼쪽이면 (-1, 0)
-
-            // 총알 생성
-            GameObject bullet = Instantiate(bullet_, gunPos.position, Quaternion.identity);
-
-            // 총알의 방향 설정
-            Bullet bulletScript = bullet.GetComponent<Bullet>();
-            if (bulletScript != null)
-            {
-                bulletScript.SetDirection(shootDirection);
-            }
-
-            // 총알 속도 설정
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.velocity = shootDirection * bulletSpeed;
-            }
+            StartCoroutine(AttackRoutine());
         }
 
         playerHealthSlider.value = DataBaseManager.Instance.playerHealth;
@@ -136,7 +125,33 @@ public class PlayerStat : MonoBehaviour
         
     }
 
+    IEnumerator AttackRoutine()
+    {
+        audioSource.PlayOneShot(audioClip[1]);
+        isAttackOnCooldown = true;
 
+        myAnimator.SetTrigger("attack");
+
+        Vector2 shootDirection = isFacingRight ? Vector2.right : Vector2.left;
+
+        GameObject bullet = Instantiate(bullet_, gunPos.position, Quaternion.identity);
+
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        if (bulletScript != null)
+        {
+            bulletScript.SetDirection(shootDirection);
+        }
+
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = shootDirection * bulletSpeed;
+        }
+
+        // 쿨타임 대기
+        yield return new WaitForSeconds(attackCooldown);
+        isAttackOnCooldown = false;
+    }
 
     #region 닿는 처리
     private void OnCollisionEnter2D(Collision2D collision)

@@ -10,14 +10,17 @@ public class BtnManager : MonoBehaviour
     public AudioClip clickSound;
     public GameObject Panelpop;
     private AudioSource audioSources;
+    public DataBaseManager dataBaseManager;
 
     private void Start()
     {
         audioSources = GetComponent<AudioSource>();
+        dataBaseManager.Init();
     }
     public void GameStart()
     {
         SceneManager.LoadScene("Start_StoryScene");
+        dataBaseManager.playerHealth = 100;
         audioSources.PlayOneShot(clickSound);
     }
 

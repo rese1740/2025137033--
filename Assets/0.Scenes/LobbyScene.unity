@@ -155,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickSound: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   Panelpop: {fileID: 1538037838}
+  dataBaseManager: {fileID: 11400000, guid: 813c80b454926804f96681eef2903b78, type: 2}
 --- !u!4 &54649091
 Transform:
   m_ObjectHideFlags: 0
