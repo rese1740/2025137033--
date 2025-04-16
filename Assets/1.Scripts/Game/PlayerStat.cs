@@ -33,6 +33,14 @@ public class PlayerStat : MonoBehaviour
     [Header("소리")]
     public AudioClip[] audioClip;
 
+    [Header("대쉬")]
+    public float dashSpeed = 20f;
+    public float dashDuration = 0.3f;
+    private float dashTime;
+    private Vector2 moveDir;
+    private bool isDashing = false;
+    public GhostManager ghost;
+
     [Header("기타")]
     public Animator myAnimator;
     public Image playerImg;
@@ -113,6 +121,11 @@ public class PlayerStat : MonoBehaviour
             skillDamage = 0;
 
         }
+
+        if (!isDashing && Input.GetKeyDown(KeyCode.C))
+        {
+            StartDash();
+        }
         #endregion
 
         #region HP
@@ -123,6 +136,19 @@ public class PlayerStat : MonoBehaviour
         #endregion
 
         
+    }
+    void FixedUpdate()
+    {
+        if (isDashing)
+        {
+            rb.velocity = moveDir * dashSpeed;
+
+            dashTime -= Time.fixedDeltaTime;
+            if (dashTime <= 0)
+            {
+                StopDash();
+            }
+        }
     }
 
     IEnumerator AttackRoutine()
@@ -263,6 +289,26 @@ public class PlayerStat : MonoBehaviour
         {
             DataBaseManager.Instance.playerHealth -= damage;
         }
+    }
+    #endregion
+
+    #region 대쉬
+    void StartDash()
+    {
+        moveDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        if (moveDir == Vector2.zero)
+            moveDir = Vector2.right;
+
+        isDashing = true;
+        dashTime = dashDuration;
+        ghost.isGhosting = true;
+    }
+
+    void StopDash()
+    {
+        isDashing = false;
+        rb.velocity = Vector2.zero;
+        ghost.isGhosting = false;
     }
     #endregion
 
