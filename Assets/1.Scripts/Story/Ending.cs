@@ -15,7 +15,7 @@ public class Ending : MonoBehaviour
 
     private void Update()
     {
-        if(_camera.position.x >= 206.5f)
+        if(_camera.position.x >= 296f)
         {
             myAnim.SetTrigger("isStrech");
             Invoke("SleepAnim", 1f);

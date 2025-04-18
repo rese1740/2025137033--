@@ -1941,9 +1941,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "W-A-S-D \uD0A4\uB85C \uC774\uB3D9\uD55C\uB2E4\nSpace Bar\uB97C \uB20C\uB7EC
-    \uC810\uD504\uD55C\uB2E4 \n\uB2F9\uC2E0\uC740 \uB05D\uAC00\uC9C0 \uB3C4\uB2EC\uD560\uC218
-    \uC788\uC5B4\uC694\n\uD654\uC774\uD305!!! "
+  m_Text: "z - \uACF5\uACA9\nx = \uC2A4\uD0AC\nc = \uB300\uC26C\n\uBCF4\uC2A4\uB97C
+    \uC7A1\uC73C\uB7EC \uB5A0\uB098\uC138\uC694"
 --- !u!222 &1880434176
 CanvasRenderer:
   m_ObjectHideFlags: 0

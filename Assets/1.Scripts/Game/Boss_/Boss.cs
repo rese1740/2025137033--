@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
+
+    public static Boss Instance;
+
     private Animator anim;
     private Rigidbody2D rb;
 
@@ -42,6 +45,7 @@ public class Boss : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         attack1Routine = StartCoroutine(BossAttack1Loop());
+        Instance = this;
     }
 
     private void Update()
@@ -57,7 +61,7 @@ public class Boss : MonoBehaviour
 
         if (bossHealth <= 14)
         {
-            SceneManager.LoadScene("Ending_Scene");
+            SceneManager.LoadScene("Boss_Story2");
             isAlive = false;
             BossDeath();
         }

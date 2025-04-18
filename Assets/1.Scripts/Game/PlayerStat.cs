@@ -36,6 +36,7 @@ public class PlayerStat : MonoBehaviour
     [Header("대쉬")]
     public float dashSpeed = 20f;
     public float dashDuration = 0.3f;
+    public float dashCoolTime = 3.0f;
     private float dashTime;
     private Vector2 moveDir;
     private bool isDashing = false;
@@ -74,6 +75,7 @@ public class PlayerStat : MonoBehaviour
             {
                 // 반대 방향으로 돌릴 때만 스케일을 수정
                 transform.localScale = new Vector3(Mathf.Sign(direction) * 7f, 7f, 1);
+                ghost.transform.localScale = new Vector3(Mathf.Sign(direction) * 7f, 7f, 1);
                 isFacingRight = !isFacingRight; // 방향 전환 상태 업데이트
             }
             myAnimator.SetBool("move", true); // 이동 중인 상태
@@ -118,13 +120,18 @@ public class PlayerStat : MonoBehaviour
         {
             myAnimator.SetBool("isReady", false);
             skillSlider.gameObject.SetActive(false);
+            DataBaseManager.Instance.playerHealth += skillDamage;
             skillDamage = 0;
 
         }
 
-        if (!isDashing && Input.GetKeyDown(KeyCode.C))
+        //배기범씨 
+
+        dashCoolTime -= Time.deltaTime;
+        if (!isDashing && Input.GetKeyDown(KeyCode.C) && dashCoolTime <= 0 )
         {
             StartDash();
+            dashCoolTime = 3f;
         }
         #endregion
 

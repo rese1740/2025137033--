@@ -9,11 +9,14 @@ public class TimelineEndHandler : MonoBehaviour
     public string nextSceneName; // 다음 씬 이름
 
     public Image reloadingImg;
+    public FadeManager fadeManager;
+   
 
     void Start()
     {
         if (timelineDirector != null)
             timelineDirector.stopped += OnTimelineStopped;
+        fadeManager.FadeIn();
     }
 
 
@@ -28,14 +31,21 @@ public class TimelineEndHandler : MonoBehaviour
             reloadingImg.fillAmount = 0;
         }
 
-        if(reloadingImg.fillAmount >= 1)
+        if (reloadingImg.fillAmount >= 1)
         {
             SceneManager.LoadScene(nextSceneName);
         }
     }
     void OnTimelineStopped(PlayableDirector director)
     {
-        Debug.Log("타임라인 끝났으니 씬 이동!");
+        fadeManager.FadeOut();
+        Invoke("FadeSceneMove", 1.5f);
+        Boss.Instance.BossDeath();
+
+    }
+
+    void FadeSceneMove()
+    {
         SceneManager.LoadScene(nextSceneName);
     }
 }
