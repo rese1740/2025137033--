@@ -8,8 +8,8 @@ public class FollowCamera : MonoBehaviour
 
     public float minX = -5.0f;
     public float maxX = 10.0f;
-    public float minY = -5.0f;  // Add min Y limit
-    public float maxY = 5.0f;   // Add max Y limit
+    public float minY = -5.0f;  
+    public float maxY = 5.0f;   
 
     private void Update()
     {

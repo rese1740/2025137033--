@@ -50,6 +50,7 @@ public class PlayerStat : MonoBehaviour
     public Text itemText;
     private Rigidbody2D rb;
     private AudioSource audioSource;
+    public Image itom;
 
 
     private void Start()
@@ -124,8 +125,6 @@ public class PlayerStat : MonoBehaviour
             skillDamage = 0;
 
         }
-
-        //¹è±â¹ü¾¾ 
 
         dashCoolTime -= Time.deltaTime;
         if (!isDashing && Input.GetKeyDown(KeyCode.C) && dashCoolTime <= 0 )
@@ -332,6 +331,7 @@ public class PlayerStat : MonoBehaviour
     void JumpUp()
     {
         jumpForce -= 2;
+     
     }
     #endregion 
 }

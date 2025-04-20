@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class Typing : MonoBehaviour
 {
-    public Text textComponent; // UI Text 컴포넌트
-    public string fullText;    // 전체 텍스트
+    public Text textComponent;
+    public string fullText;    
     public float typingSpeed = 0.1f;
 
     private void Awake()

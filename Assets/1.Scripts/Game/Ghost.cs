@@ -12,7 +12,6 @@ public class GhostManager : MonoBehaviour
 
     void Start()
     {
-        // 이 오브젝트가 아니라, 플레이어의 SpriteRenderer 가져오기
         playerSprite = GetComponentInParent<SpriteRenderer>();
         if (playerSprite == null)
         {

@@ -27,7 +27,8 @@ public class Boss : MonoBehaviour
     public GameObject warningEffectPrefab;
     private Coroutine attack1Routine;
     private int attack1Count = 0;
-    public Transform effectSpawnPoint;
+    public Transform effectSpawnPoint1;
+    public Transform effectSpawnPoint2;
 
     [Header("보스 공격 프리팹")]
     public GameObject slashPrefab;
@@ -127,13 +128,15 @@ public class Boss : MonoBehaviour
     {
         anim.SetTrigger("attack2");
 
-        GameObject warning = Instantiate(warningEffectPrefab, effectSpawnPoint.position, Quaternion.identity);
+        Transform selectedSpawnPoint = (Random.value < 0.5f) ? effectSpawnPoint1 : effectSpawnPoint2;
+
+        GameObject warning = Instantiate(warningEffectPrefab, selectedSpawnPoint.position, Quaternion.identity);
         yield return new WaitForSeconds(0.8f);
 
-        Instantiate(bigSlashEffect, effectSpawnPoint.position, Quaternion.identity);
+        Instantiate(bigSlashEffect, selectedSpawnPoint.position, Quaternion.identity);
         Destroy(warning, 0.5f);
 
-        yield return new WaitForSeconds(1.0f); // 약간의 여유 시간 (이펙트 끝날 때까지)
+        yield return new WaitForSeconds(1.0f); 
     }
 
     public void BossDeath()

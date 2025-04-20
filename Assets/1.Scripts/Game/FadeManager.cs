@@ -32,7 +32,7 @@ public class FadeManager : MonoBehaviour
         StartCoroutine(FadeRoutine(0, 1, onComplete));
     }
 
-    private IEnumerator FadeRoutine(float startAlpha, float endAlpha, System.Action onComplete)
+    IEnumerator FadeRoutine(float startAlpha, float endAlpha, System.Action onComplete)
     {
         float time = 0f;
         Color color = fadeImage.color;
