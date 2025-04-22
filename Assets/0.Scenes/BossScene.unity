@@ -1942,10 +1942,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 892188258}
     - target: {fileID: 708555895809327835, guid: 63f7ef33310856c45ad045e45929bddc, type: 3}
-      propertyPath: attackCooldown
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 708555895809327835, guid: 63f7ef33310856c45ad045e45929bddc, type: 3}
       propertyPath: playerHealthSlider
       value: 
       objectReference: {fileID: 918838858}

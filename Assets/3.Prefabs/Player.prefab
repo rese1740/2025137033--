@@ -586,7 +586,7 @@ MonoBehaviour:
   isJumping: 0
   bullet_: {fileID: 6835689714672961807, guid: 2cda3a9ae35b0ca41b011469428ef392, type: 3}
   gunPos: {fileID: 5019927649079538688}
-  attackCooldown: 0.5
+  attackCooldown: 0.1
   skillDamage: 0
   skillSlider: {fileID: 3605905310863777283}
   playerHealthSlider: {fileID: 0}
@@ -595,6 +595,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3f31af427c820bb4ca48b690b05def98, type: 3}
   dashSpeed: 20
   dashDuration: 0.3
+  dashCoolTime: 3
   ghost: {fileID: 5256913118601881959}
   myAnimator: {fileID: 8252386670252718139}
   playerImg: {fileID: 0}
@@ -604,6 +605,7 @@ MonoBehaviour:
   - {fileID: -792567532, guid: ce95cc2f5b9c966458d789eb4b4b2654, type: 3}
   wallText: {fileID: 0}
   itemText: {fileID: 0}
+  itom: {fileID: 0}
 --- !u!95 &8252386670252718139
 Animator:
   serializedVersion: 5
@@ -676,7 +678,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: ccf20c61b9edd644e8502a446de02e4b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
